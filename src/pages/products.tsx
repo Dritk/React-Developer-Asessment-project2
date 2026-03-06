@@ -7,15 +7,24 @@ import useDebounce from "../hooks/useDebounce";
 import Button from "../components/button";
 import SearchBar from "../components/searchbar";
 
+import { UseCategories } from "../hooks/useCategories";
+import { useNavigate } from "react-router-dom";
+
 const Products = () => {
+  const { categories } = UseCategories();
+  console.log(categories, "some");
   const [products, setProducts] = useState<Product[]>([]);
   const [skip, setSkip] = useState(0);
   const [search, setSearch] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [filter, setFilter] = useState("");
+  const [sorting, setSorting] = useState("");
+  const [order, setOrder] = useState("asc");
 
   const debouncedSearch = useDebounce(search, 1500);
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -26,8 +35,9 @@ const Products = () => {
         if (debouncedSearch) {
           url = `https://dummyjson.com/products/search?q=${debouncedSearch}`;
         } else if (filter) {
-          console.log("check");
-          url = `https://dummyjson.com/products/filter?key=category&value=${filter}`;
+          url = `https://dummyjson.com/products/category/${filter}`;
+        } else if (sorting) {
+          url = `https://dummyjson.com/products?sortBy=${sorting}&order=${order}`;
         } else {
           url = `https://dummyjson.com/products?skip=${skip}&limit=12`;
         }
@@ -41,7 +51,7 @@ const Products = () => {
       }
     };
     fetchData();
-  }, [skip, debouncedSearch, filter]);
+  }, [skip, debouncedSearch, filter, sorting, order]);
   const onNext = () => {
     setSkip(skip + 10);
 
@@ -58,6 +68,7 @@ const Products = () => {
     setFilter(event.target.value);
     setSkip(0);
   };
+
   return (
     <div className="flex flex-col items-center =">
       <h1 className="text-3xl font-bold mt-6 ">Products</h1>
@@ -71,11 +82,29 @@ const Products = () => {
           }}
         />
         <select
-          className="border border-gray-400 p-2 rounded"
-          onChange={onCheck}
+          className="border p-2 rounded"
+          onChange={(e) => setSorting(e.target.value)}
         >
+          <option value="">Sort By</option>
+          <option value="price">Price</option>
+          <option value="rating">Rating</option>
+        </select>
+
+        <select
+          className="border p-2 rounded"
+          onChange={(e) => setOrder(e.target.value)}
+        >
+          <option value="asc">Low</option>
+          <option value="desc">High</option>
+        </select>
+
+        <select className="border p-2 rounded" onChange={onCheck}>
           <option value="">All</option>
-          <option value="male">Fragrance</option>
+          {categories.map((cat) => (
+            <option key={cat} value={cat}>
+              {cat}
+            </option>
+          ))}
         </select>
       </div>
 
@@ -101,6 +130,7 @@ const Products = () => {
               price={product.price}
               rating={product.rating}
               discount={product.discountPercentage}
+              onClick={() => navigate(`/${product.id}`)}
             />
           ))}
         </div>
