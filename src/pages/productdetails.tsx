@@ -1,12 +1,21 @@
 import { useEffect, useState } from "react";
 import type { Product } from "../types/products";
 import axios from "axios";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 const ProducDetails = () => {
+  const navigate = useNavigate();
   const { id } = useParams<{ id: string }>();
   const [productDetails, setProductDetails] = useState<Product>();
-  const [formData, setFormData] = useState({ id: id, quantity: "" });
+  const [formData, setFormData] = useState({
+    userId: 1,
+    products: [
+      {
+        id: id,
+        quantity: 1,
+      },
+    ],
+  });
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -18,16 +27,37 @@ const ProducDetails = () => {
     };
     fetchData();
   }, [id]);
-  console.log(formData);
+
+  const onsubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    const response = await axios.post(
+      `https://dummyjson.com/carts/add`,
+      formData,
+    );
+    if (response.status == 201) {
+      alert("Added to cart");
+      navigate(`/cart?id=${id}&q=${formData.products[0].quantity}`);
+    }
+    console.log(response);
+  };
   return (
     <div className="max-w-6xl mx-auto p-6">
       <div>
-        <form className="flex gap-4 mb-6">
+        <form className="flex gap-4 mb-6" onSubmit={onsubmit}>
           <input
             placeholder="Quantity"
-            value={formData.quantity}
+            value={formData.products[0].quantity}
             onChange={(e) =>
-              setFormData({ ...formData, quantity: e.target.value })
+              setFormData({
+                ...formData,
+                products: [
+                  {
+                    ...formData.products[0],
+                    quantity: Number(e.target.value),
+                  },
+                ],
+              })
             }
           />
           <button className="bg-blue-500" type="submit">
