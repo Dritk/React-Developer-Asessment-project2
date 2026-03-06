@@ -6,6 +6,7 @@ import { useParams } from "react-router-dom";
 const ProducDetails = () => {
   const { id } = useParams<{ id: string }>();
   const [productDetails, setProductDetails] = useState<Product>();
+  const [formData, setFormData] = useState({ id: id, quantity: "" });
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -17,31 +18,63 @@ const ProducDetails = () => {
     };
     fetchData();
   }, [id]);
-  console.log(productDetails);
+  console.log(formData);
   return (
-    <div>
-      <img
-        src={productDetails?.images[0] || "/vite.svg"}
-        alt="Product images"
-        className="w-56 h-56"
-      />
-      <RowDetails
-        label="Full Description"
-        value={productDetails?.description || ""}
-      />
-      <RowDetails label="Brand" value={productDetails?.brand || ""} />
-      <RowDetails label="Stock" value={productDetails?.stock || 0} />
+    <div className="max-w-6xl mx-auto p-6">
+      <div>
+        <form className="flex gap-4 mb-6">
+          <input
+            placeholder="Quantity"
+            value={formData.quantity}
+            onChange={(e) =>
+              setFormData({ ...formData, quantity: e.target.value })
+            }
+          />
+          <button className="bg-blue-500" type="submit">
+            Add To Cart
+          </button>
+        </form>
+      </div>
 
-      <p>Reviews</p>
-      {productDetails?.reviews.map((value, index) => (
-        <div key={index}>
-          <RowDetails label="Date" value={value?.date || ""} />
-          <RowDetails label="Reviewer Name" value={value?.reviewerName || ""} />
-          <RowDetails label="Email" value={value?.reviewerEmail || ""} />
-          <RowDetails label="Rating" value={value?.comment || ""} />
-          <RowDetails label="Comment" value={value?.comment || ""} />
+      <div className="grid md:grid-cols-2 gap-10 bg-gray-100 rounded-xl p-6">
+        <div className="flex justify-center">
+          <img
+            src={productDetails?.images[0] || "/vite.svg"}
+            alt="Product"
+            className="w-full max-w-md h-86 object-cover rounded-lg"
+          />
         </div>
-      ))}
+
+        <div>
+          <h1 className="text-3xl font-bold mb-4">{productDetails?.title}</h1>
+          <RowDetails
+            label="Description"
+            value={productDetails?.description || ""}
+          />
+          <RowDetails label="Brand" value={productDetails?.brand || ""} />
+          <RowDetails label="Stock" value={productDetails?.stock || 0} />
+          <RowDetails label="Price" value={`$${productDetails?.price || ""}`} />
+        </div>
+      </div>
+
+      <div className="mt-10">
+        <h2 className="text-2xl font-bold mb-6">Customer Reviews</h2>
+
+        <div className="grid md:grid-cols-2 gap-6">
+          {productDetails?.reviews.map((review, index) => (
+            <div
+              key={index + 1}
+              className="border rounded-lg p-4 shadow-sm bg-gray-100"
+            >
+              <RowDetails label="Reviewer" value={review?.reviewerName || ""} />
+              <RowDetails label="Email" value={review?.reviewerEmail || ""} />
+              <RowDetails label="Rating" value={review?.rating || 0} />
+              <RowDetails label="Date" value={review?.date || ""} />
+              <RowDetails label="Comment" value={review?.comment || ""} />
+            </div>
+          ))}
+        </div>
+      </div>
     </div>
   );
 };
