@@ -80,7 +80,7 @@ const Products = () => {
           }}
         />
         <select
-          className="border p-2 rounded"
+          className="border border-gray-400 p-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
           onChange={(e) => setSorting(e.target.value)}
         >
           <option value="">Sort By</option>
@@ -89,14 +89,17 @@ const Products = () => {
         </select>
 
         <select
-          className="border p-2 rounded"
+          className="border border-gray-400 p-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
           onChange={(e) => setOrder(e.target.value)}
         >
           <option value="asc">Low</option>
           <option value="desc">High</option>
         </select>
 
-        <select className="border p-2 rounded" onChange={onCheck}>
+        <select
+          className="border border-gray-400 p-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+          onChange={onCheck}
+        >
           <option value="">All</option>
           {categories.map((cat) => (
             <option key={cat} value={cat}>
@@ -104,9 +107,12 @@ const Products = () => {
             </option>
           ))}
         </select>
+        <Button
+          label="Cart"
+          onClick={() => navigate("/cart")}
+          className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg "
+        />
       </div>
-
-      <Button label="Cart" onClick={() => navigate("/cart")} />
 
       {loading && (
         <div className="flex justify-center my-10">
@@ -129,7 +135,7 @@ const Products = () => {
               title={product.title}
               price={product.price}
               rating={product.rating}
-              discount={product.discountPercentage}
+              discount={Math.round(product.discountPercentage)}
               onClick={() => navigate(`/${product.id}`)}
             />
           ))}

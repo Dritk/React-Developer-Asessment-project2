@@ -37,7 +37,6 @@ const ProducDetails = () => {
       formData,
     );
     if (response.status == 201) {
-      alert("Added to cart");
       const storedCart = localStorage.getItem("cart");
       const cart = storedCart ? JSON.parse(storedCart) : { products: [] };
 
@@ -52,34 +51,49 @@ const ProducDetails = () => {
       }
 
       localStorage.setItem("cart", JSON.stringify(cart));
+      alert("Added to cart");
       navigate("/cart");
     }
   };
   return (
-    <div className="max-w-6xl mx-auto p-6">
-      <div>
-        <form className="flex gap-4 mb-6" onSubmit={onsubmit}>
-          <input
-            placeholder="Quantity"
-            value={formData.products[0].quantity}
-            onChange={(e) =>
-              setFormData({
-                ...formData,
-                products: [
-                  {
-                    ...formData.products[0],
-                    quantity: Number(e.target.value),
-                  },
-                ],
-              })
-            }
-          />
-          <button className="bg-blue-500" type="submit">
-            Add To Cart
-          </button>
-        </form>
+    <div className="flex flex-col max-w-6xl mx-auto p-6">
+      <div className="flex justify-between items-center ">
+        <h2 className="text-3xl font-bold mb-6">Product Details</h2>
+        <Button
+          label="Continue Shopping"
+          onClick={() => navigate("/")}
+          className="px-4 py-3 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg "
+        />
       </div>
-      <Button label="Continue Shopping" />
+
+      <form
+        className="flex justify-end items-center gap-4 my-6"
+        onSubmit={onsubmit}
+      >
+        <p className="text-md font-bold">Quantity</p>
+        <input
+          placeholder="Quantity"
+          className="w-24 px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+          value={formData.products[0].quantity}
+          onChange={(e) =>
+            setFormData({
+              ...formData,
+              products: [
+                {
+                  ...formData.products[0],
+                  quantity: Number(e.target.value),
+                },
+              ],
+            })
+          }
+        />
+        <button
+          type="submit"
+          className="px-4 py-2 bg-green-600 hover:bg-green-700 text-white font-semibold rounded-lg "
+        >
+          Add to Cart
+        </button>
+      </form>
 
       <div className="grid md:grid-cols-2 gap-10 bg-gray-100 rounded-xl p-6">
         <div className="flex justify-center">
@@ -101,7 +115,6 @@ const ProducDetails = () => {
           <RowDetails label="Price" value={`$${productDetails?.price || ""}`} />
         </div>
       </div>
-
       <div className="mt-10">
         <h2 className="text-2xl font-bold mb-6">Customer Reviews</h2>
 

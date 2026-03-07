@@ -5,11 +5,12 @@ interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   label: string;
 }
 
-const Button = ({ onClick, label }: ButtonProps) => {
+const Button = ({ onClick, label, className }: ButtonProps) => {
   const navigate = useNavigate();
+
   return (
     <button
-      className="cursor-pointer "
+      className={className ? `${className}` : `cursor-pointer  `}
       onClick={onClick || (() => navigate("/"))}
     >
       {label}

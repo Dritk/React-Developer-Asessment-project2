@@ -1,5 +1,3 @@
-
-
 export interface CartResponse {
   id: number
   products: Product[]
