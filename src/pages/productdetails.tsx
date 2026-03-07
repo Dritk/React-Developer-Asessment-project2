@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import type { Product } from "../types/products";
 import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
+import Button from "../components/button";
 
 const ProducDetails = () => {
   const navigate = useNavigate();
@@ -37,9 +38,22 @@ const ProducDetails = () => {
     );
     if (response.status == 201) {
       alert("Added to cart");
-      navigate(`/cart?id=${id}&q=${formData.products[0].quantity}`);
+      const storedCart = localStorage.getItem("cart");
+      const cart = storedCart ? JSON.parse(storedCart) : { products: [] };
+
+      const newProduct = response.data.products[0];
+
+      const existing = cart.products.find((p: any) => p.id === newProduct.id);
+
+      if (existing) {
+        existing.quantity += newProduct.quantity;
+      } else {
+        cart.products.push(newProduct);
+      }
+
+      localStorage.setItem("cart", JSON.stringify(cart));
+      navigate("/cart");
     }
-    console.log(response);
   };
   return (
     <div className="max-w-6xl mx-auto p-6">
@@ -65,6 +79,7 @@ const ProducDetails = () => {
           </button>
         </form>
       </div>
+      <Button label="Continue Shopping" />
 
       <div className="grid md:grid-cols-2 gap-10 bg-gray-100 rounded-xl p-6">
         <div className="flex justify-center">

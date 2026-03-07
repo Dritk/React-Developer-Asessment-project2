@@ -12,7 +12,7 @@ import { useNavigate } from "react-router-dom";
 
 const Products = () => {
   const { categories } = UseCategories();
-  console.log(categories, "some");
+
   const [products, setProducts] = useState<Product[]>([]);
   const [skip, setSkip] = useState(0);
   const [search, setSearch] = useState("");
@@ -54,8 +54,6 @@ const Products = () => {
   }, [skip, debouncedSearch, filter, sorting, order]);
   const onNext = () => {
     setSkip(skip + 10);
-
-    console.log(skip);
   };
 
   const onPrevious = () => {
@@ -107,6 +105,8 @@ const Products = () => {
           ))}
         </select>
       </div>
+
+      <Button label="Cart" onClick={() => navigate("/cart")} />
 
       {loading && (
         <div className="flex justify-center my-10">
