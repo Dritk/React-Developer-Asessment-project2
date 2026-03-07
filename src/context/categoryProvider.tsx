@@ -18,7 +18,7 @@ const CategoryProvider = ({ children }: { children: ReactNode }) => {
     };
     fetchCategories();
   }, []);
-  console.log(categories);
+
   return (
     <CategoryContext.Provider value={{ categories }}>
       {children}

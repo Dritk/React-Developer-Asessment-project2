@@ -7,7 +7,8 @@ const SearchBar = ({ onChange }: SearchBarProps) => {
     <div className="">
       <input
         type="text"
-        className="border border-black p-2"
+        className="border  border-gray-400 p-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+        placeholder="Search...."
         onChange={onChange}
       />
     </div>

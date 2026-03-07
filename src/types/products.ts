@@ -1,4 +1,4 @@
-export interface Root {
+export interface ProductResponse {
   products: Product[]
   total: number
   skip: number
