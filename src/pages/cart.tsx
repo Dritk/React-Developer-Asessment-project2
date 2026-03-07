@@ -45,7 +45,23 @@ const Cart = () => {
   const taxRate = 0.1;
   const tax = subtotal * taxRate;
   const total = subtotal + tax;
-  console.log({ cart });
+
+  if (!cart || cart.products.length === 0) {
+    return (
+      <div className="flex flex-col items-center justify-center h-[60vh] gap-4">
+        <h2 className="text-3xl font-bold">Your Cart is Empty</h2>
+        <p className="text-gray-600">
+          Looks like you haven't added anything yet.
+        </p>
+
+        <Button
+          label="Continue Shopping"
+          onClick={() => navigate("/")}
+          className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg"
+        />
+      </div>
+    );
+  }
   return (
     <div className="flex flex-col gap-2 max-w-6xl mx-auto p-6">
       <h2 className=" flex text-3xl font-bold mb-6 justify-center">
