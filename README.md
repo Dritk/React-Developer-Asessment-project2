@@ -65,7 +65,8 @@ export default defineConfig([
       parserOptions: {
         project: ['./tsconfig.node.json', './tsconfig.app.json'],
         tsconfigRootDir: import.meta.dirname,
-      },
+      },<img width="395" height="209" alt="image" src="https://github.com/user-attachments/assets/a604a5ea-dd46-4d01-8e37-31341330e223" />
+
       // other options...
     },
   },
